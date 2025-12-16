@@ -1,0 +1,11 @@
+*.asm linguist-language=Assembly
+*.c linguist-language=C
+*.cs linguist-language=C#
+*.nim linguist-language=Nim
+*.pas linguist-language=Pascal
+*.au3 linguist-language=AutoIt
+*.py linguist-language=Python
+*.rs linguist-language=Rust
+*.go linguist-language=Go
+*.bat linguist-language=Batchfile
+
