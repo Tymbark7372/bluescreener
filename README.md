@@ -1,6 +1,6 @@
 # BSODder
 
-trigger a windows bsod or linux kernel panic in 24+ programming languages for educational purposes
+trigger a windows bsod in 24 programming languages for educational purposes
 
 ## ⚠️ WARNING
 
@@ -13,15 +13,9 @@ trigger a windows bsod or linux kernel panic in 24+ programming languages for ed
 
 ## what it does
 
-### windows
-calls `RtlAdjustPrivilege` to enable shutdown privileges, then `NtRaiseHardError` with specific flags that force windows to display a blue screen of death.
-
-### linux
-writes 'c' to `/proc/sysrq-trigger` which triggers an immediate kernel panic.
+these programs call `RtlAdjustPrivilege` to enable shutdown privileges, then `NtRaiseHardError` with specific flags that force windows to display a blue screen of death. works on windows 7 through windows 11.
 
 ## languages
-
-### windows (24 languages)
 
 | language | x32 | x64 | compiler/runtime needed |
 |----------|-----|-----|------------------------|
@@ -50,134 +44,91 @@ writes 'c' to `/proc/sysrq-trigger` which triggers an immediate kernel panic.
 | PowerShell | ✓ | ✓ | PowerShell (built-in) |
 | AutoIt | ✓ | ✓ | AutoIt3 + Aut2exe |
 
-### linux (23 languages)
-
-| language | x32 | x64 | compiler/runtime needed |
-|----------|-----|-----|------------------------|
-| Assembly | ✓ | ✓ | NASM + ld |
-| C | ✓ | ✓ | GCC |
-| C++ | ✓ | ✓ | G++ |
-| C# | ✓ | ✓ | Mono (mcs) |
-| F# | ✓ | ✓ | Mono (fsharpc) |
-| VB.NET | ✓ | ✓ | Mono (vbnc) |
-| Rust | ✓ | ✓ | Rust |
-| Go | ✓ | ✓ | Go compiler |
-| Nim | ✓ | ✓ | Nim compiler |
-| Zig | ✓ | ✓ | Zig compiler |
-| D | ✓ | ✓ | DMD compiler |
-| V | ✓ | ✓ | V compiler |
-| Delphi/Pascal | ✓ | ✓ | Free Pascal (fpc) |
-| Kotlin | - | ✓ | Kotlin Native |
-| Crystal | - | ✓ | Crystal compiler |
-| Python | ✓ | ✓ | Python |
-| Ruby | ✓ | ✓ | Ruby |
-| Perl | ✓ | ✓ | Perl |
-| Lua | ✓ | ✓ | Lua / LuaJIT |
-| PHP | ✓ | ✓ | PHP |
-| Java | ✓ | ✓ | Java |
-| Node.js | ✓ | ✓ | Node.js |
-| PowerShell | ✓ | ✓ | PowerShell Core (pwsh) |
-| Bash | ✓ | ✓ | Bash (built-in) |
-
 ## building
 
-### windows
+each language folder has build.bat or build instructions
+
+### compiled languages
+
 ```batch
 cd Windows\<Language>\x64
 build.bat
 ```
 
-### linux
-```bash
-cd Linux/<Language>/x64
-chmod +x build.sh
-./build.sh
+### interpreted languages
+
+```batch
+cd Windows\<Language>
+# follow instructions in build.bat
+```
+
+### quick examples
+
+**assembly (x64 native tools prompt):**
+```batch
+cd Windows\Assembly\x64
+build_x64.bat
+```
+
+**c# (any prompt):**
+```batch
+cd Windows\CSharp\x64
+build.bat
+```
+
+**python (no build needed):**
+```batch
+cd Windows\Python\x64
+python bsod.py
+```
+
+**powershell (no build needed):**
+```batch
+cd Windows\PowerShell
+powershell -ExecutionPolicy Bypass -File bsod.ps1
 ```
 
 ## running
 
-### windows
-run as administrator:
-```batch
-bsod_x64.exe
-```
+**seriously, only run this in a vm or test machine**
 
-### linux
-run as root:
-```bash
-sudo ./panic_x64
-# or for interpreted:
-sudo python3 panic.py
-```
+run as administrator. your system will bsod immediately.
 
 ## how it works
 
-### windows
 1. `RtlAdjustPrivilege(19, TRUE, FALSE, &enabled)` - enables SE_SHUTDOWN_PRIVILEGE
-2. `NtRaiseHardError(0xC0000420, 0, 0, NULL, 6, &response)` - triggers bsod
+2. `NtRaiseHardError(0xC0000420, 0, 0, NULL, 6, &response)` - triggers bsod with HARDERROR_OVERRIDE_ERRORMODE flag
 
-both are undocumented ntdll.dll exports
-
-### linux
-```bash
-echo c > /proc/sysrq-trigger
-```
-the kernel's magic sysrq key - 'c' triggers a crash dump / kernel panic
+both functions are undocumented ntdll.dll exports
 
 ## project structure
 
 ```
 Windows/
-├── Assembly/       masm x86/x64
-├── C/              msvc
-├── Cpp/            msvc
-├── CSharp/         .net
-├── FSharp/         .net
-├── VBNET/          .net
-├── Rust/           rustc
-├── Go/             go
-├── Nim/            nim
-├── Zig/            zig
-├── D/              dmd
-├── V/              v
-├── Delphi/         fpc
-├── Kotlin/         kotlin native
-├── Crystal/        crystal
-├── Python/         ctypes
-├── Ruby/           fiddle
-├── Perl/           Win32::API
-├── Lua/            luajit ffi
-├── PHP/            ffi
-├── Java/           jna
-├── NodeJS/         ffi-napi
-├── PowerShell/     built-in
-└── AutoIt/         dllcall
-
-Linux/
-├── Assembly/       nasm x86/x64
-├── C/              gcc
-├── Cpp/            g++
-├── CSharp/         mono
-├── FSharp/         mono
-├── VBNET/          mono
-├── Rust/           rustc
-├── Go/             go
-├── Nim/            nim
-├── Zig/            zig
-├── D/              dmd
-├── V/              v
-├── Delphi/         fpc
-├── Kotlin/         kotlin native
-├── Crystal/        crystal
-├── Python/         built-in
-├── Ruby/           built-in
-├── Perl/           built-in
-├── Lua/            lua/luajit
-├── PHP/            built-in
-├── Java/           jdk
-├── NodeJS/         node
-├── PowerShell/     pwsh
-└── Bash/           built-in
+├── Assembly/       x86/x64 masm
+├── C/              x86/x64
+├── Cpp/            x86/x64
+├── CSharp/         x86/x64
+├── FSharp/         x86/x64
+├── VBNET/          x86/x64
+├── Rust/           x86/x64
+├── Go/             x86/x64
+├── Nim/            x86/x64
+├── Zig/            x86/x64
+├── D/              x86/x64
+├── V/              x86/x64
+├── Delphi/         x86/x64 (free pascal)
+├── Kotlin/         x64 only (kotlin native)
+├── Crystal/        x64 only
+├── Python/         x86/x64 (interpreted)
+├── Ruby/           interpreted
+├── Perl/           interpreted
+├── Lua/            luajit
+├── PHP/            php 7.4+ ffi
+├── Java/           jvm + jna
+├── NodeJS/         node + ffi-napi
+├── PowerShell/     script only
+└── AutoIt/         x86/x64
 ```
 
 ## license
