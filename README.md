@@ -1,6 +1,6 @@
 # BSODder
 
-trigger a windows bsod in multiple programming languages for educational purposes
+trigger a windows bsod in 24 programming languages for educational purposes
 
 ## ⚠️ WARNING
 
@@ -21,103 +21,71 @@ these programs call `RtlAdjustPrivilege` to enable shutdown privileges, then `Nt
 |----------|-----|-----|------------------------|
 | Assembly | ✓ | ✓ | MASM (ml/ml64) |
 | C | ✓ | ✓ | MSVC (cl) |
-| C# | ✓ | ✓ | .NET SDK or csc |
-| Nim | ✓ | ✓ | Nim compiler |
-| Delphi/Pascal | ✓ | ✓ | Free Pascal (fpc) |
-| AutoIt | ✓ | ✓ | AutoIt3 + Aut2exe |
-| Python | ✓ | ✓ | Python (or PyInstaller) |
+| C++ | ✓ | ✓ | MSVC (cl) |
+| C# | ✓ | ✓ | .NET SDK (csc) |
+| F# | ✓ | ✓ | .NET SDK (fsc) |
+| VB.NET | ✓ | ✓ | .NET SDK (vbc) |
 | Rust | ✓ | ✓ | Rust + MSVC target |
 | Go | ✓ | ✓ | Go compiler |
+| Nim | ✓ | ✓ | Nim compiler |
+| Zig | ✓ | ✓ | Zig compiler |
+| D | ✓ | ✓ | DMD compiler |
+| V | ✓ | ✓ | V compiler |
+| Delphi/Pascal | ✓ | ✓ | Free Pascal (fpc) |
+| Kotlin | - | ✓ | Kotlin Native |
+| Crystal | - | ✓ | Crystal compiler |
+| Python | ✓ | ✓ | Python (ctypes) |
+| Ruby | ✓ | ✓ | Ruby (fiddle) |
+| Perl | ✓ | ✓ | Perl + Win32::API |
+| Lua | ✓ | ✓ | LuaJIT (ffi) |
+| PHP | ✓ | ✓ | PHP 7.4+ (ffi) |
+| Java | ✓ | ✓ | Java + JNA |
+| Node.js | ✓ | ✓ | Node + ffi-napi |
+| PowerShell | ✓ | ✓ | PowerShell (built-in) |
+| AutoIt | ✓ | ✓ | AutoIt3 + Aut2exe |
 
 ## building
 
-each language folder has x32 and x64 subfolders with a build.bat
+each language folder has build.bat or build instructions
 
-### assembly
+### compiled languages
+
 ```batch
-# x86 Native Tools Command Prompt
-cd Windows\Assembly\x32
-build_x86.bat
+cd Windows\<Language>\x64
+build.bat
+```
 
-# x64 Native Tools Command Prompt  
+### interpreted languages
+
+```batch
+cd Windows\<Language>
+# follow instructions in build.bat
+```
+
+### quick examples
+
+**assembly (x64 native tools prompt):**
+```batch
 cd Windows\Assembly\x64
 build_x64.bat
 ```
 
-### c
+**c# (any prompt):**
 ```batch
-# x86 Native Tools Command Prompt
-cd Windows\C\x32
-build.bat
-
-# x64 Native Tools Command Prompt
-cd Windows\C\x64
-build.bat
-```
-
-### c#
-```batch
-cd Windows\CSharp\x32
-build.bat
-
 cd Windows\CSharp\x64
 build.bat
 ```
 
-### nim
+**python (no build needed):**
 ```batch
-cd Windows\Nim\x32
-build.bat
-
-cd Windows\Nim\x64
-build.bat
-```
-
-### delphi/pascal (free pascal)
-```batch
-cd Windows\Delphi\x32
-build.bat
-
-cd Windows\Delphi\x64
-build.bat
-```
-
-### autoit
-```batch
-# use autoit compiler gui or command line
-cd Windows\AutoIt\x32
-Aut2exe /in bsod.au3 /out bsod_x86.exe /x86
-
-cd Windows\AutoIt\x64
-Aut2exe /in bsod.au3 /out bsod_x64.exe /x64
-```
-
-### python
-```batch
-# run directly (use 32 or 64 bit python)
-python bsod.py
-
-# or compile with pyinstaller
 cd Windows\Python\x64
-pyinstaller --onefile bsod.py
+python bsod.py
 ```
 
-### rust
+**powershell (no build needed):**
 ```batch
-cd Windows\Rust\x32
-build.bat
-
-cd Windows\Rust\x64
-build.bat
-```
-
-### go
-```batch
-cd Windows\Go\x32
-build.bat
-
-cd Windows\Go\x64
-build.bat
+cd Windows\PowerShell
+powershell -ExecutionPolicy Bypass -File bsod.ps1
 ```
 
 ## running
@@ -133,6 +101,36 @@ run as administrator. your system will bsod immediately.
 
 both functions are undocumented ntdll.dll exports
 
+## project structure
+
+```
+Windows/
+├── Assembly/       x86/x64 masm
+├── C/              x86/x64
+├── Cpp/            x86/x64
+├── CSharp/         x86/x64
+├── FSharp/         x86/x64
+├── VBNET/          x86/x64
+├── Rust/           x86/x64
+├── Go/             x86/x64
+├── Nim/            x86/x64
+├── Zig/            x86/x64
+├── D/              x86/x64
+├── V/              x86/x64
+├── Delphi/         x86/x64 (free pascal)
+├── Kotlin/         x64 only (kotlin native)
+├── Crystal/        x64 only
+├── Python/         x86/x64 (interpreted)
+├── Ruby/           interpreted
+├── Perl/           interpreted
+├── Lua/            luajit
+├── PHP/            php 7.4+ ffi
+├── Java/           jvm + jna
+├── NodeJS/         node + ffi-napi
+├── PowerShell/     script only
+└── AutoIt/         x86/x64
+```
+
 ## license
 
-educational purposes only. use responsibly.
+This is free and unencumbered software released into the public domain. See LICENSE file.
